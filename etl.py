@@ -22,6 +22,15 @@ os.environ['AWS_SECRET_ACCESS_KEY'] = config['AWS']['AWS_SECRET_ACCESS_KEY']
 
 
 def create_spark_session():
+    """
+        Create a Spark session and set the necessary settings.
+        
+        Parameters:
+            Nono
+        
+        Returns:
+            Spark session.
+    """
     spark = SparkSession \
         .builder \
         .config("spark.jars.packages", "org.apache.hadoop:hadoop-aws:2.7.0") \
@@ -30,6 +39,16 @@ def create_spark_session():
 
 
 def process_song_data(spark, input_data, output_data):
+    """
+        Extract, transform and load song data from Udacity's S3.
+        Create song and artist tables.
+        Create song and artist parquet and load into my S3.
+        
+        Parameters:
+            Argument1: Spark session
+            Argument2: Path to Udacity's S3
+            Argument3: Path to my S3
+    """
     # song filepath
     song_path = 'song_data/*/*/*/*.json'
     
@@ -63,6 +82,17 @@ def process_song_data(spark, input_data, output_data):
 
 
 def process_log_data(spark, input_data, output_data):
+    """
+        Extract, transform and load log data from Udacity's S3.
+        Create user and time tables.
+        Join user, time, song and artist tables to create songplay tables.
+        Create user, time and songplay parquet and load into my S3.
+        
+        Parameters:
+            Argument1: Spark session
+            Argument2: Path to Udacity's S3
+            Argument3: Path to my S3
+    """
     # log filepath
     log_path = 'log_data/*/*/*.json'
     
@@ -160,11 +190,17 @@ def process_log_data(spark, input_data, output_data):
 
 
 def main():
+    """
+        Main function that manages ETL process.
+        Create Spark Session.
+        Set path to Udacity's S3 and my S3.
+        Call song and log process functions.
+    """
     spark = create_spark_session()
     input_data = "s3a://udacity-dend/"
     output_data = "s3a://sparkifyout/output/"
     
-#     process_song_data(spark, input_data, output_data)    
+    process_song_data(spark, input_data, output_data)    
     process_log_data(spark, input_data, output_data)
 
 
